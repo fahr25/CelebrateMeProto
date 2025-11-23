@@ -1,7 +1,17 @@
+using Microsoft.EntityFrameworkCore;
+using CelebrateMeProto.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// DbContext Production
+// builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    // options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// DbContext Development
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DevConnection")));
 
 var app = builder.Build();
 
