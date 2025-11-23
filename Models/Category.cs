@@ -1,4 +1,4 @@
-namespace PsCoreDemo.Models;
+namespace CelebrateMeProto.Models;
 
 public enum Category
 {

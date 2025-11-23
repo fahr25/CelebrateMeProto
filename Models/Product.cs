@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace PsCoreDemo.Models;
+namespace CelebrateMeProto.Models;
 
 public class Product
 {
