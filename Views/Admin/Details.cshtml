@@ -1,0 +1,34 @@
+@model CelebrateMeProto.Models.Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<h1>Product Details</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h3 class="card-title">@Model.Name</h3>
+        <p class="card-text">@Model.Description</p>
+
+        <dl class="row">
+            <dt class="col-sm-3">Category</dt>
+            <dd class="col-sm-9">@Model.Category</dd>
+
+            <dt class="col-sm-3">Inventory</dt>
+            <dd class="col-sm-9">@Model.Inventory</dd>
+
+            <dt class="col-sm-3">Points</dt>
+            <dd class="col-sm-9">@Model.Points</dd>
+
+            <dt class="col-sm-3">Min / Max Age</dt>
+            <dd class="col-sm-9">@Model.MinAge - @Model.MaxAge</dd>
+
+            <dt class="col-sm-3">Image</dt>
+            <dd class="col-sm-9">@Model.Image</dd>
+        </dl>
+
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
