@@ -1,0 +1,32 @@
+@model CelebrateMeProto.Models.OrderDraft
+
+<h1>Review Cart</h1>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<table class="table">
+    <thead><tr><th>Name</th><th>Qty</th><th>Unit</th><th>Subtotal</th></tr></thead>
+    <tbody>
+    @foreach(var it in Model.Items)
+    {
+        <tr>
+            <td>@it.ProductName</td>
+            <td>@it.Quantity</td>
+            <td>@it.UnitPoints</td>
+            <td>@it.Subtotal</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<p>Points assigned: @Model.PointsAssigned</p>
+<p>Points used: @Model.PointsUsed</p>
+<p>Points remaining: @Model.PointsRemaining</p>
+
+<form asp-action="Checkout" method="post">
+    <button class="btn btn-success" type="submit">Checkout</button>
+    <a asp-action="Category" asp-route-index="1" class="btn btn-secondary">Back to shop</a>
+</form>

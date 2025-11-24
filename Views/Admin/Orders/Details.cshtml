@@ -1,0 +1,30 @@
+@model CelebrateMeProto.Models.Order
+
+<h1>Order #@Model.Id</h1>
+<p>@Model.CustomerName — @Model.CustomerEmail</p>
+<p>Status: @Model.Status</p>
+
+<table class="table">
+    <thead><tr><th>Product</th><th>Qty</th><th>Points</th></tr></thead>
+    <tbody>
+    @foreach(var it in Model.Items)
+    {
+        <tr><td>@it.ProductName</td><td>@it.Quantity</td><td>@it.SubtotalPoints</td></tr>
+    }
+    </tbody>
+</table>
+
+<form asp-action="ChangeStatus" asp-controller="AdminOrders" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <select name="status" class="form-select mb-2">
+        <option value="Pending" selected="@(@Model.Status==CelebrateMeProto.Models.OrderStatus.Pending)">Pending</option>
+        <option value="Completed" selected="@(@Model.Status==CelebrateMeProto.Models.OrderStatus.Completed)">Completed</option>
+        <option value="Cancelled" selected="@(@Model.Status==CelebrateMeProto.Models.OrderStatus.Cancelled)">Cancelled</option>
+    </select>
+    <button class="btn btn-primary">Update Status</button>
+</form>
+
+<form asp-action="Refund" asp-controller="AdminOrders" method="post" class="mt-2">
+    <input type="hidden" name="id" value="@Model.Id" />
+    <button class="btn btn-danger">Refund (restore inventory + cancel)</button>
+</form>
