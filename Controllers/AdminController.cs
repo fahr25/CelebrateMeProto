@@ -3,19 +3,35 @@ using Microsoft.EntityFrameworkCore;
 using CelebrateMeProto.Data;
 using CelebrateMeProto.Models;
 using CelebrateMeProto.Repositories;
+using CelebrateMeProto.ViewModels;
 
 namespace CelebrateMeProto.Controllers;
 
 public class AdminController : Controller
 {
     private readonly IProductRepository _repo;
-    public AdminController(IProductRepository repo) => _repo = repo;
+    private readonly IOrderRepository _orders;
+
+    public AdminController(IProductRepository repo, IOrderRepository orders) 
+    {
+        _repo = repo;
+        _orders = orders;
+    }
 
     // GET: /Admin
     public async Task<IActionResult> Index()
     {
-        var items = await _repo.GetAllAsync();
-        return View(items);
+        // changed: return dashboard view model with products + recent orders
+        var products = await _repo.GetAllAsync();
+        var orders = (await _orders.GetAllAsync()).Take(20).ToList(); // most recent 20
+
+        var adminDashboardViewModel = new AdminDashboardViewModel
+        {
+            Products = products,
+            RecentOrders = orders
+        };
+
+        return View(adminDashboardViewModel);
     }
 
     // GET: /Admin/Details/5
