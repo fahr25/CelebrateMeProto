@@ -2,18 +2,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CelebrateMeProto.Data;
 using CelebrateMeProto.Models;
+using CelebrateMeProto.Repositories;
 
 namespace CelebrateMeProto.Controllers;
 
 public class AdminController : Controller
 {
-    private readonly ApplicationDbContext _db;
-    public AdminController(ApplicationDbContext db) => _db = db;
+    private readonly IProductRepository _repo;
+    public AdminController(IProductRepository repo) => _repo = repo;
 
     // GET: /Admin
     public async Task<IActionResult> Index()
     {
-        var items = await _db.Products.ToListAsync();
+        var items = await _repo.GetAllAsync();
         return View(items);
     }
 
@@ -21,7 +22,7 @@ public class AdminController : Controller
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null) return NotFound();
-        var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == id);
+        var product = await _repo.GetByIdAsync(id.Value);
         if (product == null) return NotFound();
         return View(product);
     }
@@ -37,8 +38,7 @@ public class AdminController : Controller
     public async Task<IActionResult> Create(Product product)
     {
         if (!ModelState.IsValid) return View(product);
-        _db.Add(product);
-        await _db.SaveChangesAsync();
+        await _repo.AddAsync(product);
         return RedirectToAction(nameof(Index));
     }
 
@@ -46,7 +46,7 @@ public class AdminController : Controller
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null) return NotFound();
-        var product = await _db.Products.FindAsync(id);
+        var product = await _repo.GetByIdAsync(id.Value);
         if (product == null) return NotFound();
         return View(product);
     }
@@ -60,12 +60,11 @@ public class AdminController : Controller
 
         try
         {
-            _db.Update(product);
-            await _db.SaveChangesAsync();
+            await _repo.UpdateAsync(product);
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!await _db.Products.AnyAsync(e => e.Id == id)) return NotFound();
+            if (!await _repo.ExistsAsync(id)) return NotFound();
             throw;
         }
 
@@ -76,7 +75,7 @@ public class AdminController : Controller
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null) return NotFound();
-        var product = await _db.Products.FirstOrDefaultAsync(p => p.Id == id);
+        var product = await _repo.GetByIdAsync(id.Value);
         if (product == null) return NotFound();
         return View(product);
     }
@@ -85,12 +84,7 @@ public class AdminController : Controller
     [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var product = await _db.Products.FindAsync(id);
-        if (product != null)
-        {
-            _db.Products.Remove(product);
-            await _db.SaveChangesAsync();
-        }
+        await _repo.DeleteAsync(id);
         return RedirectToAction(nameof(Index));
     }
 }
