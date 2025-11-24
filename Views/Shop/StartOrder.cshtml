@@ -1,0 +1,23 @@
+@model CelebrateMeProto.Models.OrderDraft
+
+<h1>Start Order</h1>
+
+<form asp-action="StartOrder" method="post">
+    <div class="mb-3">
+        <label asp-for="CustomerName"></label>
+        <input asp-for="CustomerName" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="CustomerEmail"></label>
+        <input asp-for="CustomerEmail" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="PointsAssigned">Points Assigned</label>
+        <input asp-for="PointsAssigned" class="form-control" />
+    </div>
+    <button class="btn btn-primary" type="submit">Start Shopping</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

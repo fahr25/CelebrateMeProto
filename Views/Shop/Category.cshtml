@@ -1,0 +1,29 @@
+@model IEnumerable<CelebrateMeProto.Models.Product>
+
+@{
+    var step = ViewData["Step"] ?? 1;
+    var pts = ViewData["PointsRemaining"] ?? 0;
+}
+
+<h3>Step @step - Points remaining: @pts</h3>
+
+<div class="row">
+@foreach (var p in Model)
+{
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>@p.Name</h5>
+                <p>@p.Description</p>
+                <p>Points: @p.Points | Inventory: @p.Inventory</p>
+
+                <form asp-action="AddItem" method="post">
+                    <input type="hidden" name="productId" value="@p.Id" />
+                    <input type="number" name="quantity" value="1" min="1" max="@p.Inventory" class="form-control mb-2" />
+                    <button class="btn btn-sm btn-primary">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+</div>

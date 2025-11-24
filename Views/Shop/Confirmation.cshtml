@@ -1,0 +1,15 @@
+@model CelebrateMeProto.Models.Order
+
+<h1>Order #@Model.Id - @Model.Status</h1>
+<p>Thanks @Model.CustomerName — your order was created at @Model.CreatedAt.ToLocalTime().</p>
+<p>Points used: @Model.PointsUsed</p>
+
+<table class="table">
+    <thead><tr><th>Product</th><th>Qty</th><th>Points</th></tr></thead>
+    <tbody>
+    @foreach(var it in Model.Items)
+    {
+        <tr><td>@it.ProductName</td><td>@it.Quantity</td><td>@it.SubtotalPoints</td></tr>
+    }
+    </tbody>
+</table>
